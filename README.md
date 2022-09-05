@@ -48,7 +48,7 @@ php artisan migrate
 7. Acessar no navegador para validar:
 
 ```
-http://localhost/8007
+http://localhost:8007/doc
 ```
 
 ### Api e Utilização
