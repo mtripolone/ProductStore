@@ -1,0 +1,530 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: "Fake Api Store"
+  description: |-
+    Esta é uma api de teste destinada ao desenvolvimento de um projeto de uma loja fake
+  license:
+    name: MIT
+  contact:
+    name: Matheus Tripolone
+    email: matheusrtripolone@gmail.com
+servers:
+  - url: "http://localhost:8007/api"
+    description: "Api de Dev"
+tags:
+  - name: Authentication
+    description: "Responsável por `Criar Token`, `Deletar Token` `Efetuar login`"
+  - name: Searching
+    description: "Responsável por `Realizar Buscas nos Produtos`"
+  - name: Products
+    description: "Responsável por `Criar`, `Deletar` e `Atualizar` os Produtos"
+paths:
+  /products:
+      get:
+        tags:
+          - Searching
+        summary: Busca Todos os Produtos
+        description: 'Responsável por buscar todos os produtos ja cadastrados no banco`.'
+        responses:
+          '200':
+            description: 'Lista de Produtos'
+            content:
+              'application/json':
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+
+          '500':
+            description: 'Não Foi Possivel encontar os Produtos'
+
+      post:
+        tags:
+          - Products
+        summary: Criação de Produtos
+        description: 'Responsável pela Criação de novos Produtos`.'
+        requestBody:
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    description: 'Nome do Produto'
+                    example: 'Lorem Ipsum'
+                  price:
+                    type: number
+                    description: 'Preço do Produto'
+                    example: 9999.99
+                  description:
+                    type: string
+                    description: 'Descrição do Produto'
+                    example: 'Lorem Ipsum'
+                  category:
+                    type: string
+                    description: 'Categoria do Produto'
+                    example: 'Lorem Ipsum'
+                  image_url:
+                    type: string
+                    description: 'Url do Produto'
+                    example: 'Lorem Ipsum'
+        responses:
+          '200':
+            description: 'Novo Produto'
+            content:
+              'application/json':
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+
+          '422':
+            description: 'Informar Campos validos'
+
+      put:
+        tags:
+          - Products
+        summary: Atualização de Produto
+        description: 'Responsável pela Atualização dos Produtos`.'
+        requestBody:
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: 'Id do Produto'
+                    example: 1
+                  name:
+                    type: string
+                    description: 'Nome do Produto'
+                    example: 'Lorem Ipsum'
+                  price:
+                    type: number
+                    description: 'Preço do Produto'
+                    example: 9999.99
+                  description:
+                    type: string
+                    description: 'Descrição do Produto'
+                    example: 'Lorem Ipsum'
+                  category:
+                    type: string
+                    description: 'Categoria do Produto'
+                    example: 'Lorem Ipsum'
+                  image_url:
+                    type: string
+                    description: 'Url do Produto'
+                    example: 'Lorem Ipsum'
+        responses:
+          '200':
+            description: 'Atualização de Produto'
+            content:
+              'application/json':
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+
+          '404':
+            description: 'Não Foi Possivel Realizar a atualização'
+
+
+      delete:
+        tags:
+          - Products
+        summary: Deletar Produto
+        description: 'Responsável por Deletar Produtos`.'
+        requestBody:
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: 'Id do Produto'
+                    example: 1
+        responses:
+          '200':
+            description: 'Apagar Produto'
+            content:
+              'application/json':
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      description: 'Produto Deletado'
+                      example: 'Lorem Ipsum'
+
+          '404':
+            description: 'Não foi encontrado produto a ser deletado'
+
+  /products/{id}:
+    get:
+      tags:
+        - Searching
+      summary: Busca o Produto pelo Id
+      description: 'Responsável por buscar o produto pelo id`.'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: 'Id do Produto'
+                  example: 1
+      responses:
+        '200':
+          description: 'Produto'
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+        '404':
+          description: 'Não Foi Possivel encontar o Produto'
+
+  /products/search/{category}:
+    get:
+      tags:
+        - Searching
+      summary: Busca o Produto pela sua categoria
+      description: 'Responsável por buscar produtos pela categoria`.'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                category:
+                  type: string
+                  description: 'Categoria do Produto'
+                  example: 'Lorem Ipsum'
+      responses:
+        '200':
+          description: 'Produtos por categoria'
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+        '404':
+          description: 'Não Foi Possivel encontar os Produtos desta categoria'
+
+  /products/search/{name}/{category}:
+    get:
+      tags:
+        - Searching
+      summary: Busca o Produto pelo seu nome e categoria
+      description: 'Responsável por buscar produtos pelo nome e categoria`.'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Nome do Produto'
+                  example: 'Lorem Ipsum'
+                category:
+                  type: string
+                  description: 'Categoria do Produto'
+                  example: 'Lorem Ipsum'
+      responses:
+        '200':
+          description: 'Produtos'
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+        '404':
+          description: 'Não Foi Possivel encontar oProduto'
+
+  /products/sprite/no_image_url:
+    get:
+      tags:
+        - Searching
+      summary: Busca os Produtos que não possuem url cadastradas
+      description: 'Responsável por buscar produtos que não tem url cadastrada`.'
+      responses:
+        '200':
+          description: 'Produtos sem url cadastrada'
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+        '404':
+          description: 'Não existem produtos sem url cadastrada'
+
+  /products/sprite/image_url:
+    get:
+      tags:
+        - Searching
+      summary: Busca os Produtos que possuem url cadastrada
+      description: 'Responsável por buscar produtos pela url cadastrada`.'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                image_url:
+                  type: string
+                  description: 'Url do Produto'
+                  example: 'Lorem Ipsum'
+      responses:
+        '200':
+          description: 'Produtos com url cadastada'
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+        '404':
+          description: 'Não existem produtos com url cadastrada'
+
+  /register:
+    post:
+      tags:
+        - Authentication
+      summary: Criação de usuário e Token
+      description: 'Responsável pela criação de usuário e token de acesso`.'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Nome de usuário'
+                  example: 'Matheus'
+                email:
+                  type: string
+                  description: 'Email do Usuário'
+                  example: 'meuemail@gmail.com'
+                password:
+                  type: string
+                  description: 'Senha do Usuário'
+                  example: 'Lorem Ipsum 123'
+                password-confirmation:
+                  type: string
+                  description: 'Confirme a Senha do Usuário'
+                  example: 'Lorem Ipsum 123'
+      responses:
+        '200':
+          description: 'Criação de Token de usuário'
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TokenRegister'
+
+        '401':
+          description: 'Credenciais Invalidas'
+
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: Criação de token para usuário já cadastrado
+      description: 'Responsável criação de novo token via usuario ja cadastado`.'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: 'Nome de usuário'
+                  example: 'Matheus'
+                email:
+                  type: string
+                  description: 'Email do Usuário'
+                  example: 'meuemail@gmail.com'
+                password:
+                  type: string
+                  description: 'Senha do Usuário'
+                  example: 'Lorem Ipsum 123'
+      responses:
+        '200':
+          description: 'Criação de novo Token para usuário já cadastrado'
+          content:
+            'application/json':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TokenLogin'
+
+        '401':
+          description: 'Credenciais não autorizadas'
+
+  /logout:
+    post:
+      tags:
+        - Authentication
+      summary: Exclusão de Token
+      description: 'Responsável pela exclusão do token de acesso`.'
+      requestBody:
+        content:
+          'application/json':
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: 'Token de Usuário'
+                  example: 'Lorem Ipsum'
+      responses:
+        '200':
+          description: 'Exclusão de Token'
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: 'Logout'
+                    example: 'Lorem Ipsum'
+
+
+        '404':
+          description: 'Sem Autorização'
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id Product
+          example: 1
+          required: true
+        name:
+          type: string
+          description: Nome do Produto
+          example: Product One
+          required: true
+        price:
+          type: number
+          description: Valor do Produto
+          example: 9999.99
+          required: true
+        description:
+          type: string
+          description: Descrição do Produto
+          example: 'Lorem Ipsum'
+          required: true
+        category:
+          type: string
+          description: Categoria do Produto
+          example: 'Lorem Ipsum'
+          required: true
+        image_url:
+          type: string
+          description: URL do Produto
+          example: 'http://example.com.br'
+          required: false
+
+    TokenRegister:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            name:
+              type: string
+              description: Nome de Usuário
+              example: 'Matheus'
+              required: true
+            email:
+              type: string
+              description: Email de Usuário
+              example: 'meuemail@gmail.com'
+              required: true
+            updated_at:
+              type: string
+              description: Data de Atualização
+              example: 'Lorem ipsum'
+              required: true
+            created_at:
+              type: string
+              description: Data de Criação
+              example: 'Lorem Ipsum'
+              required: true
+            id:
+              type: integer
+              description: Id de Usuário
+              example: 1
+              required: true
+        token:
+          type: string
+          description: Token de usuário
+          example: 'Lorem Ipsum'
+          required: true
+
+    TokenLogin:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              description: Id do Usuário
+              example: 1
+              required: true
+            name:
+              type: string
+              description: Nome de Usuário
+              example: 'Matheus'
+              required: true
+            email:
+              type: string
+              description: Email de Usuário
+              example: 'meuemail@gmail.com'
+              required: true
+            email_verified_at:
+              type: string
+              description: Verificação de Email
+              example: 'Lorem ipsum'
+              required: true
+            created_at:
+              type: string
+              description: Data de Criação
+              example: 'Lorem Ipsum'
+              required: true
+            updated_at:
+              type: String
+              description: Data de Atualização
+              example: 'Lorem Ipsum'
+              required: true
+        token:
+          type: string
+          description: Token de usuário
+          example: 'Lorem Ipsum'
+          required: true
+
